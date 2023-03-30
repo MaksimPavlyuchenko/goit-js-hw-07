@@ -21,9 +21,7 @@ const listGallery = document.querySelector(".gallery");
     .join("");
   listGallery.insertAdjacentHTML("beforeend", markup);
 })();
-const imageGallery = document.querySelector(".gallery__image");
-const itemGallery = document.querySelector(".gallery__item");
-const linkGallery = document.querySelector(".gallery__link");
+
 listGallery.addEventListener("click", onOpenImage);
 
 function onOpenImage(event) {
@@ -35,5 +33,12 @@ function onOpenImage(event) {
   const instance = basicLightbox.create(`
   <div><img src="${source}" height = 790px></div>
 `);
+  const image = document.querySelector(".gallery__image");
+
   instance.show();
+  window.addEventListener("keydown", () => {
+    if (image) {
+      instance.close();
+    }
+  });
 }
