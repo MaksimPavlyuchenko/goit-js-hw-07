@@ -33,11 +33,9 @@ function onOpenImage(event) {
   const instance = basicLightbox.create(`
   <div><img src="${source}" height = 790px></div>
 `);
-  const tg = document.querySelector(".basicLightbox");
-  console.log(tg);
+  instance.show();
   const image = document.querySelector(".gallery__image");
 
-  instance.show();
   listGallery.addEventListener("keydown", () => {
     if (image) {
       instance.close();
