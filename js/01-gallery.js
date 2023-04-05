@@ -1,44 +1,57 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
-const arrayImages = galleryItems;
-const listGallery = document.querySelector(".gallery");
 
-(function () {
-  const markup = arrayImages
-    .map(
-      ({ preview, original, description }) =>
-        `<li class="gallery__item">
-    <a class="gallery__link" href="${original}">
-      <img
-        class="gallery__image"
-        src="${preview}"
-        data-source="${original}"
-        alt="${description}"
-      />
-    </a>
-  </li>`
-    )
-    .join("");
-  listGallery.insertAdjacentHTML("beforeend", markup);
-})();
+const createMarkupGallery = galleryItems
+  .map(({ preview, original, description }) => {
+    return `<li class="gallery__item">
+  <a class="gallery__link" href = "${original}">
+    <img
+      class="gallery__image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+    />
+  </a>
+</li>`;
+  })
+  .join("");
 
-listGallery.addEventListener("click", onOpenImage);
+const gallery = document.querySelector(".gallery");
 
-function onOpenImage(event) {
+gallery.insertAdjacentHTML("beforeend", createMarkupGallery);
+
+gallery.addEventListener("click", onOpen);
+
+function onOpen(event) {
   event.preventDefault();
-  if (!event.target.classList.contains("gallery__image")) {
+  const target = event.target.classList.contains("gallery__image");
+  if (!target) {
     return;
   }
-  const source = event.target.dataset.source;
-  const instance = basicLightbox.create(`
-  <div><img src="${source}" height = 790px></div>
-`);
-  instance.show();
-  const image = document.querySelector(".gallery__image");
-
-  listGallery.addEventListener("keydown", () => {
-    if (image) {
-      instance.close();
+  const instance = basicLightbox.create(
+    `<img
+   src = '${event.target.dataset.source}'
+    />
+  `,
+    {
+      onShow: (instance) => {
+        gallery.addEventListener("keydown", modalClose);
+        function modalClose(event) {
+          if (event.code === "Escape") {
+            instance.close();
+          }
+        }
+      },
+      onClose: (instance) => {
+        gallery.removeEventListener("keydown", modalClose);
+        function modalClose(event) {
+          if (event.code === "Escape") {
+            instance.close();
+          }
+        }
+      },
     }
-  });
+  );
+
+  instance.show();
 }
