@@ -10,7 +10,7 @@ const markupImages = galleryItems
   })
   .join("");
 const gallery = document.querySelector(".gallery");
-gallery.liststyle;
+// gallery.liststyle;
 gallery.innerHTML = markupImages;
 var lightbox = new SimpleLightbox(".gallery a", {
   captionDelay: 250,
